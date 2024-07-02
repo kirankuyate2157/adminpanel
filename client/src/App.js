@@ -4,8 +4,14 @@ import './App.css';
 import { Toaster } from 'react-hot-toast';
 import Auth from './components/Auth';
 import Home from './components/Home';
+import axios from 'axios';
+
 
 function App() {
+  axios.defaults.baseURL = "http://localhost:8080/api/v1";
+  axios.defaults.params = {};
+  axios.defaults.withCredentials = true;
+  
   return (
     <div className="App">
       <Routes>
