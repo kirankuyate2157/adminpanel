@@ -1,11 +1,11 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
-import { User } from "./../models/user.model.js";
+import { CRMUser } from "./../models/user.model.js";
 import jwt from "jsonwebtoken";
 const generateAccessAndRefreshTokens = async (userId) => {
   try {
-    const user = await User.findById(userId);
+    const user = await CRMUser.findById(userId);
     const refreshToken = user.generateRefreshToken();
     const accessToken = user.generateAccessToken();
     user.refreshToken = refreshToken;
@@ -25,55 +25,46 @@ const registration = asyncHandler(async (req, res) => {
     - return res
     */
 
-  const { email, password, fullName, isAdmin, adminId } = req.body;
-  function generateUsername(fullName) {
+  const { email, password, firstName, lastName, isAdmin = "admin", adminId } = req.body;
 
-    const randomNumber = Math.floor(Math.random() * 100); // Generates a random number between 0 and 9999
-    const username = `${fullName?.trim()}${randomNumber}`;
-    return username;
-  }
-  const username = generateUsername(fullName);
   console.log({
     email: email,
-    username: username,
     password: password,
-    fullName: fullName,
+    firstName,
+    lastName,
     isAdmin: isAdmin,
     adminId: adminId
   });
 
   if (
-    [fullName, username, email, password].some((field) => field?.trim() === "")
+    [firstName, lastName, email, password].some((field) => field?.trim() === "")
   ) {
     throw new ApiError(400, "field is missing or empty 🫠", res);
   }
   let adminStatus;
   if (isAdmin !== "admin") {
     if (adminId?.trim() !== "") {
-      adminStatus = await User.findOne({
-        $or: [{ username: adminId }, { email: adminId }],
-      });
+      adminStatus = await CRMUser.findOne({ email: adminId });
       if (!adminStatus) {
         throw new ApiError(404, `Admin reference account not found with is admin Id ${adminId} 🫠 `, res);
       }
     }
   }
 
-  const existedUser = await User.findOne({ $or: [{ username }, { email }] });
+  const existedUser = await CRMUser.findOne({ email });
   if (existedUser) {
-    throw new ApiError(409, "User with mail or  username already exists 🫠", res);
+    throw new ApiError(409, "User with mail  already exists 🫠", res);
   }
 
-  const user = await User.create({
-    fullName,
-    username: username?.toLowerCase(),
+  const user = await CRMUser.create({
+    firstName, lastName,
     email,
     accountType: isAdmin,
     adminId: adminId ? adminStatus?._id : "",
     password,
   });
 
-  const createdUser = await User.findById(user.id).select(
+  const createdUser = await CRMUser.findById(user.id).select(
     "-password -refreshToken"
   );
 
@@ -86,6 +77,7 @@ const registration = asyncHandler(async (req, res) => {
 });
 
 const loginUser = asyncHandler(async (req, res) => {
+
   /* 
 - req body data
 - find username email in DB
@@ -100,7 +92,7 @@ const loginUser = asyncHandler(async (req, res) => {
     throw new ApiError(400, "email is required 🫠..", res);
   }
 
-  const user = await User.findOne({ email });
+  const user = await CRMUser.findOne({ email });
 
   if (!user) {
     throw new ApiError(404, "user does not exist .🫠..", res);
@@ -115,7 +107,7 @@ const loginUser = asyncHandler(async (req, res) => {
   const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
     user._id
   );
-  const loggedUser = await User.findById(user._id).select(
+  const loggedUser = await CRMUser.findById(user._id).select(
     "-password -refreshToken "
   );
 
@@ -141,7 +133,7 @@ const logoutUser = asyncHandler(async (req, res) => {
   clear cookies and refreshToken of user
 
   */
-  User.findByIdAndUpdate(
+  CRMUser.findByIdAndUpdate(
     req.user._id,
     {
       // $set: { refreshToken: undefined },
@@ -174,9 +166,9 @@ const refreshTokenToAccessToken = asyncHandler(async (req, res) => {
       process.env.REFRESH_TOKEN_SECRET
     );
 
-    const user = await User.findById(decodedRefreshToken?._id);
+    const user = await CRMUser.findById(decodedRefreshToken?._id);
 
-    if (!user) throw new ApiError(401, "Invalid Refresh token User Not found ");
+    if (!user) throw new ApiError(401, "Invalid Refresh token CRMUser Not found ");
 
     if (IncomingRefreshToken !== user?.refreshToken) {
       throw new ApiError(401, "Refresh token is expired or used 🫠", res);
@@ -207,7 +199,7 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
     throw new ApiError(401, "Invalid email or password 🫠", res);
   }
 
-  const user = await User.findById(req.user?._id);
+  const user = await CRMUser.findById(req.user?._id);
 
   const isPasswordCorrect = await user.isPasswordCorrect(oldPassword);
   if (!isPasswordCorrect) {

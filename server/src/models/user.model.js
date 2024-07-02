@@ -69,4 +69,5 @@ userSchema.methods.generateRefreshToken = function () {
   );
 };
 
-export const User = mongoose.model("User", userSchema);
+//since user models already in DB so change name
+export const CRMUser = mongoose.model("CRMUser", userSchema);
