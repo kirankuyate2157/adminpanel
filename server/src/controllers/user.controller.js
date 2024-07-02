@@ -215,13 +215,58 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {}, "password changed successfully ✅"));
 });
 
-
-
 const getCurrentUser = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(new ApiResponse(200, req.user, "user fetched successfully ✅"));
 });
+
+const updateAccountDetails = asyncHandler(async (req, res) => {
+  const { firstName, lastName } = req.body;
+  const { id } = req.params;
+
+  if (!firstName || !lastName) {
+    throw new ApiError(400, "All field are required 🫠", res);
+  }
+
+  if (req.user.isAdmin !== "admin") {
+    throw new ApiError(400, "unauthorized operations Admin can only Edit🫠", res);
+  }
+  if (req.user._id && id) {
+    const member = await CRMUser.findById(id);
+
+    if (member && member.adminId != req.user._id) {
+      throw new ApiError(400, "unauthorized operations only member`s Admin can Edit 🫠", res);
+    }
+  }
+
+  let user;
+
+  if (id) {
+    user = await CRMUser.findByIdAndUpdate(id,
+      {
+        $set: { firstName: firstName, lastName: lastName },
+      },
+      { new: true }
+    ).select("-password");
+  }
+  else {
+    user = await CRMUser.findByIdAndUpdate(
+      req.user?._id,
+      {
+        $set: { firstName: firstName, lastName: lastName },
+      },
+      { new: true }
+    ).select("-password");
+
+  }
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(200, user, "Account details updated successfully ✅")
+    );
+});
+
 
 
 export {
@@ -231,5 +276,5 @@ export {
   refreshTokenToAccessToken,
   changeCurrentPassword,
   getCurrentUser,
-
+  updateAccountDetails
 };
