@@ -2,6 +2,10 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
+
+//routes
+import UserRoutes from "./routes/user.routes.js"
+
 const app = express();
 
 
@@ -18,7 +22,7 @@ app.use(express.static("public")); //store file direct on server for public acce
 app.use(cookieParser()); //cookie  set get operations
 
 
-
+app.use("/api/v1/users", UserRoutes)
 app.get("/", (req, res) => {
   res.send("hey i back end api started now testing .... 🍻⏳");
 });
