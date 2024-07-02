@@ -5,8 +5,7 @@ import './App.css';
 function App() {
   return (
     <div className="App">
-      <div>Hii </div>
-      
+       <Route path="/auth" element={<div>in App routes</div>} />
       <Routes>
         <Route path="/" element={<div>in App routes</div>} />
         <Route path="*" element={<div>in App routes</div>} />
