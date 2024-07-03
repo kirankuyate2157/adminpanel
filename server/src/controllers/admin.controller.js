@@ -40,6 +40,37 @@ const getAllMembers = asyncHandler(async (req, res) => {
     return res.status(200).json(new ApiResponse(200, { members, pagination: paginationInfo }, "Employees fetched successfully ✅"));
 });
 
+const editMember = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const { firstName, lastName } = req.body;
+
+    const member = await CRMUser.findById(id);
+    if (!member) {
+        throw new ApiError(404, "Member not found 🫠", res);
+    }
+
+    member.firstName = firstName;
+    member.lastName = lastName;
+
+
+    await member.save();
+
+    res.status(200).json(new ApiResponse(200, member, "Member updated successfully ✅"));
+});
+
+const deleteMember = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+
+    const member = await CRMUser.findByIdAndDelete(id);
+    if (!member) {
+        throw new ApiError(404, "Member not found");
+    }
+
+    res.status(200).json(new ApiResponse(200, null, "Member deleted successfully ✅"));
+});
+
 export {
-    getAllMembers
+    getAllMembers,
+    deleteMember,
+    editMember
 };

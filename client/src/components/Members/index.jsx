@@ -47,12 +47,27 @@ const Members = () => {
     fetchMembers();
   }, [page, search]);
 
-  console.log("member data : ", members)
+  const [selectedMember, setSelectedMember] = useState(null);
+  const handleEdit = (member) => {
+    setSelectedMember(member);
+    setIsModalOpen(true);
+  };
+
+  const handleDelete = async (memberId) => {
+    try {
+      await axios.delete(`/admin/member/${memberId}`);
+      toast.success("Member deleted successfully");
+      fetchMembers();
+    } catch (error) {
+      toast.error("Failed to delete member");
+    }
+  };
+
 
   return (
     <div>
       <div className='flex flex-col md:p-[2rem] mb-[4rem] md:mb-0 p-2 w-[100%]'>
-        <AddMemberModal open={isModalOpen} onClose={handleCloseModal} />
+      <AddMemberModal open={isModalOpen} onClose={handleCloseModal} member={selectedMember} fetchMembers={fetchMembers} />
         <div className='relative w-full flex md:flex-row md:justify-between flex-col md:items-center'>
           <p className='text-[150%] font-bold'>Members</p>
           <div className='flex flex-row w-full h-10 my-3 justify-between md:justify-end items-center gap-2'>
@@ -62,7 +77,7 @@ const Members = () => {
               value={search}
               onChange={(e) => {
                 setSearch(e.target.value);
-                setPage(1); // Reset to the first page when search changes
+                setPage(1);
               }}
             />
             <Button
@@ -73,7 +88,7 @@ const Members = () => {
             </Button>
           </div>
         </div>
-        <MemberTable members={members} pagination={pagination} setPage={setPage} />
+        <MemberTable members={members} pagination={pagination} fetchMembers={fetchMembers} setPage={setPage} handleEdit={handleEdit} handleDelete={handleDelete} />
       </div>
     </div>
   );

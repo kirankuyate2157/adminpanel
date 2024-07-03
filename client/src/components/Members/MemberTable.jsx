@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { MdOutlineModeEdit, MdDelete } from "react-icons/md";
 import {
     Paper,
@@ -11,13 +11,27 @@ import {
     TableRow,
 } from "@mui/material";
 import { columns } from "./constant/columns"; // Assuming this imports the column headers
+import ConfirmDelete from "./ConfirmDelete";
 
-const MemberTable = ({ members, pagination, setPage }) => {
+const MemberTable = ({ members, pagination, fetchMembers, setPage, handleEdit, handleDelete }) => {
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [selectedMemberId, setSelectedMemberId] = useState(null);
+
     const handlePageChange = (event, newPage) => {
         setPage(newPage + 1); // Adjust because MUI TablePagination is zero-based
     };
 
-    return (
+    const handleOpenDeleteModal = (memberId) => {
+        setSelectedMemberId(memberId);
+        setDeleteModalOpen(true);
+    };
+
+    const handleCloseDeleteModal = () => {
+        setSelectedMemberId(null);
+        setDeleteModalOpen(false);
+    };
+
+    return (<>
         <Paper sx={{ width: "100%", overflow: "hidden" }}>
             <TableContainer sx={{ maxHeight: { xs: 440, md: 550 } }}>
                 <Table stickyHeader aria-label='sticky table'>
@@ -65,8 +79,8 @@ const MemberTable = ({ members, pagination, setPage }) => {
                                     </TableCell>
                                     <TableCell align='center' >
                                         <div className="flex text-lg justify-center gap-2">
-
-                                            <MdOutlineModeEdit /> <MdDelete />
+                                            <MdOutlineModeEdit onClick={() => handleEdit(row)} />
+                                            <MdDelete onClick={() => handleOpenDeleteModal(row._id)} />
                                         </div>
 
                                     </TableCell>
@@ -83,7 +97,14 @@ const MemberTable = ({ members, pagination, setPage }) => {
                 rowsPerPage={pagination.itemsPerPage}
                 rowsPerPageOptions={[pagination.itemsPerPage]}
             />
+
         </Paper>
+        <ConfirmDelete
+            open={deleteModalOpen}
+            onClose={handleCloseDeleteModal}
+            memberId={selectedMemberId}
+            fetchMembers={fetchMembers}
+        /></>
     );
 };
 
