@@ -6,6 +6,7 @@ import Auth from './components/Auth';
 import Home from './components/Home';
 import axios from 'axios';
 import HomeLayout from './layout/HomeLayout';
+import DashboardSkeleton from './components/DashboardSkeleton';
 
 
 function App() {
@@ -14,11 +15,11 @@ function App() {
   axios.defaults.withCredentials = true;
 
   return (
-    <div className="App">
+    <div className="h-[100vh] w-[100vw]">
       <Routes>
         <Route path="/auth" element={<Auth />} />
         <Route path="/" element={<HomeLayout />} >
-          <Route path="/home" element={<Home />} />
+          <Route path="/home" element={<DashboardSkeleton />} />
           <Route path="*" element={<div>in App routes</div>} />
         </Route>
       </Routes>
