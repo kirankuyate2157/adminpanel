@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { currentUser, logOutUser } from "./Auth/utils/authApi.js";
 import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 
 const Navbar = () => {
   const [user, setUser] = useState(null);
@@ -28,7 +28,7 @@ const Navbar = () => {
 
       console.log("Logout response:", res);
       if (res.success) {
-        toast.success(res.message);
+       
         navigate("/");
       }
     } catch (error) {

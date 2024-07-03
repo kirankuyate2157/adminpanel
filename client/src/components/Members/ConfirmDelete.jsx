@@ -1,6 +1,6 @@
 import React from "react";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@mui/material";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 import axios from "axios";
 
 const ConfirmDelete = ({ open, onClose, memberId, fetchMembers }) => {
@@ -8,11 +8,11 @@ const ConfirmDelete = ({ open, onClose, memberId, fetchMembers }) => {
     const handleDelete = async () => {
         try {
             await axios.delete(`/admin/members/${memberId}`);
-            toast.success("Member deleted successfully");
+           
             fetchMembers();
             onClose(); 
         } catch (error) {
-            toast.error("Failed to delete member");
+            // toast.error("Failed to delete member");
         }
     };
 

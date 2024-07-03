@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import toast from 'react-hot-toast';
+// import toast from 'react-hot-toast';
 import CustomSearchBar from '../CustomSearchBar';
 import { Button } from "@mui/material";
 import MemberTable from './MemberTable';
@@ -39,7 +39,7 @@ const Members = () => {
       setMembers(response.data.data.members);
       setPagination(response.data.data.pagination);
     } catch (error) {
-      toast.error("Failed to fetch members");
+      // toast.error("Failed to fetch members");
     }
   };
 
@@ -56,10 +56,10 @@ const Members = () => {
   const handleDelete = async (memberId) => {
     try {
       await axios.delete(`/admin/member/${memberId}`);
-      toast.success("Member deleted successfully");
+      
       fetchMembers();
     } catch (error) {
-      toast.error("Failed to delete member");
+      // toast.error("Failed to delete member");
     }
   };
 

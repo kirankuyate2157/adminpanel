@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, IconButton, TextField } from "@mui/material";
 import { IoEye, IoEyeOff } from "react-icons/io5";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { registerMember } from "../Auth/utils/authApi";
@@ -59,7 +59,7 @@ const AddMemberModal = ({ open, onClose, member, fetchMembers }) => {
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       for (const key in validationErrors) {
-        toast.error(validationErrors[key]);
+        // toast.error(validationErrors[key]);
         break;
       }
       return;
@@ -68,16 +68,16 @@ const AddMemberModal = ({ open, onClose, member, fetchMembers }) => {
     try {
       if (member) {
         await axios.patch(`/admin/member/${member._id}`, data);
-        toast.success("Member updated successfully");
+        // toast.success("Member updated successfully");
       } else {
         await registerMember(data);
-        toast.success("Member added successfully");
+        // toast.success("Member added successfully");
       }
       fetchMembers();
       setData({});
       setTimeout(() => onClose(), 2000);
     } catch (error) {
-      toast.error(error.message);
+      // toast.error(error.message);
     }
   };
 

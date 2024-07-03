@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { IoEye, IoEyeOff } from "react-icons/io5";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 
 function Login({ setType }) {
   const [data, setData] = useState({
@@ -20,17 +20,17 @@ function Login({ setType }) {
     e.preventDefault();
     console.log(data);
     if (Object.keys(data).length <= 0) {
-      toast.error("please enter a valid credentials!");
+      // toast.error("please enter a valid credentials!");
       return;
     }
     try {
       const res = await axios.post("/users/login", data);
       if (res) {
-        toast.success("User login successfully");
+       
         nav("/");
       }
     } catch (error) {
-      toast.error(error.message);
+      // toast.error(error.message);
     }
   };
 
