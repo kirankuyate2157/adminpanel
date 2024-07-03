@@ -17,6 +17,7 @@
 - **Axios**: HTTP Client
 - **React-Router**: Routing
 - **React Icons**: Icons
+- **React hooks**: useContext, useState, useEffect
 - **Toast**: Notifications
 
 ### Backend
