@@ -17,7 +17,7 @@ const TopBar = () => {
           setUser(userData);
         }
       } catch (error) {
-        navigate("/auth")
+        if (!user) navigate("/auth")
         console.error("Error fetching user data:", error);
       }
     };
@@ -25,14 +25,14 @@ const TopBar = () => {
     fetchUserData();
   }, [user]);
 
-  
+
   const logout = async () => {
     try {
       const res = await logOutUser();
 
       console.log("Logout response:", res);
       if (res.success) {
-       
+
         navigate("/auth");
       }
     } catch (error) {
