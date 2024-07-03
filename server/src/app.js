@@ -4,7 +4,8 @@ import cookieParser from "cookie-parser";
 
 
 //routes
-import UserRoutes from "./routes/user.routes.js"
+import UserRoutes from "./routes/user.routes.js";
+import AdminRoutes from "./routes/admin.routes.js"
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use(cookieParser()); //cookie  set get operations
 
 
 app.use("/api/v1/users", UserRoutes)
+app.use("/api/v1/admin", AdminRoutes)
 app.get("/", (req, res) => {
   res.send("hey i back end api started now testing .... 🍻⏳");
 });

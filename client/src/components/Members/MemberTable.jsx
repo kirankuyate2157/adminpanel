@@ -1,8 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { MdOutlineArrowCircleRight } from "react-icons/md";
-import { IconButton, ButtonBase } from "@mui/material";
-
+import React from "react";
+import { MdOutlineModeEdit, MdDelete } from "react-icons/md";
 import {
     Paper,
     Table,
@@ -13,12 +10,13 @@ import {
     TablePagination,
     TableRow,
 } from "@mui/material";
-import { columns } from "./constant/columns";
+import { columns } from "./constant/columns"; // Assuming this imports the column headers
 
-const MemberTable = () => {
-    const nav = useNavigate();
-    const [rows, setRows] = useState([])
-    
+const MemberTable = ({ members, pagination, setPage }) => {
+    const handlePageChange = (event, newPage) => {
+        setPage(newPage + 1); // Adjust because MUI TablePagination is zero-based
+    };
+
     return (
         <Paper sx={{ width: "100%", overflow: "hidden" }}>
             <TableContainer sx={{ maxHeight: { xs: 440, md: 550 } }}>
@@ -28,67 +26,65 @@ const MemberTable = () => {
                             {columns.map((column, index) => (
                                 <TableCell
                                     key={index}
-                                    // align={column.align}
                                     style={{
-                                        // minWidth: column.minWidth,
                                         backgroundColor: "white",
                                         color: "gray",
                                         fontSize: "13px",
                                         fontWeight: "bold",
-                                    }}>
+                                    }}
+                                >
                                     {column}
                                 </TableCell>
                             ))}
-                            <TableCell></TableCell>
+
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows &&
-                            rows
-                                .map((row) => {
-                                    return (
-                                        <TableRow
-                                            hover
-                                            tabIndex={-1}
-                                            key={row._id}
-                                            component={ButtonBase}
-                                        >
-                                            <TableCell
-                                                align='left'
-                                                sx={{ fontWeight: "600" }}
-                                            >
-                                                {row._id.slice(-6)}
-                                            </TableCell>
-                                            <TableCell
-                                                align='left'
-                                            >
-                                                {row.firstName}
-                                            </TableCell>
-                                            <TableCell
-                                                align='left'
-                                            >
-                                                {row.lastName}
-                                            </TableCell>
-                                            <TableCell
-                                                align='left'
-                                            >
-                                                {row.email}
-                                            </TableCell>
-                                            <TableCell
-                                                align='left'
-                                            >
-                                                {row.password}
-                                            </TableCell>
+                        {members &&
+                            members.map((row) => (
+                                <TableRow
+                                    hover
+                                    tabIndex={-1}
+                                    key={row._id}
 
+                                >
+                                    <TableCell align='left' sx={{ fontWeight: "600" }}>
+                                        {row._id.slice(-6)}
+                                    </TableCell>
+                                    <TableCell align='left'>
+                                        {row.firstName}
+                                    </TableCell>
+                                    <TableCell align='left'>
+                                        {row.lastName}
+                                    </TableCell>
+                                    <TableCell align='left'>
+                                        {row.email}
+                                    </TableCell>
+                                    <TableCell align='left' className="font-bold">
+                                        {"***********"}
+                                    </TableCell>
+                                    <TableCell align='center' >
+                                        <div className="flex text-lg justify-center gap-2">
 
-                                        </TableRow>
-                                    );
-                                })}
+                                            <MdOutlineModeEdit /> <MdDelete />
+                                        </div>
+
+                                    </TableCell>
+                                </TableRow>
+                            ))}
                     </TableBody>
                 </Table>
             </TableContainer>
+            <TablePagination
+                component="div"
+                count={pagination.totalItems}
+                page={pagination.currentPage - 1}
+                onPageChange={handlePageChange}
+                rowsPerPage={pagination.itemsPerPage}
+                rowsPerPageOptions={[pagination.itemsPerPage]}
+            />
         </Paper>
-    )
-}
+    );
+};
 
 export default MemberTable;
