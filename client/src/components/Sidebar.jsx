@@ -64,7 +64,7 @@ const Sidebar = () => {
             </li>
             <li>
               <Link
-                to={"/employee"}
+                to={"/members"}
                 className='flex items-start rounded px-3 py-2 hover:text-slate-900 bg-slate-100 text-black dark:hover:bg-slate-400'
               >
                <FaUsers className='text-xl' />

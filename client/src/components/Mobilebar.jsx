@@ -10,7 +10,7 @@ const MobileBar = () => {
         <Link to="/home" className="text-center">
           <FaHome className="text-2xl text-white" />
         </Link>
-        <Link  className="text-center">
+        <Link to="/members" className="text-center">
           <FaUsers className="text-2xl text-white" />
         </Link>
      

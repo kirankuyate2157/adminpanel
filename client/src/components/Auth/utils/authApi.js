@@ -9,6 +9,14 @@ export const registerUser = async (userData) => {
         throw error.response.data.message || 'Error registering user';
     }
 };
+export const registerMember = async (userData) => {
+    try {
+        const response = await axios.post('/users/register-member', userData);
+        return response.data;
+    } catch (error) {
+        throw error.response.data.message || 'Error registering user';
+    }
+};
 
 export const loginUser = async (userData) => {
     try {

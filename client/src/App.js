@@ -7,6 +7,7 @@ import Home from './components/Home';
 import axios from 'axios';
 import HomeLayout from './layout/HomeLayout';
 import DashboardSkeleton from './components/DashboardSkeleton';
+import Members from './components/Members';
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
         <Route path="/auth" element={<Auth />} />
         <Route path="/" element={<HomeLayout />} >
           <Route path="/home" element={<DashboardSkeleton />} />
+          <Route path="/members" element={<Members/>} />
           <Route path="*" element={<div>in App routes</div>} />
         </Route>
       </Routes>

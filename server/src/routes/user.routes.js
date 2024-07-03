@@ -9,7 +9,8 @@ import {
   refreshTokenToAccessToken,
   changeCurrentPassword,
   getCurrentUser,
- 
+  registrationMember
+
 } from "../controllers/user.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
@@ -17,6 +18,9 @@ const router = Router();
 
 router.route("/register").post(
   registration
+);
+router.route("/register-member").post(verifyJWT,
+  registrationMember
 );
 router.route("/login").post(loginUser);
 //secured routes

@@ -1,0 +1,1 @@
+export const columns = ["ID", "First Name", "Last Name", "Email", "Password", "Action"]

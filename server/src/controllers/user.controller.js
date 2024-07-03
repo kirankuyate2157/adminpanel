@@ -76,6 +76,68 @@ const registration = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, createdUser, "User registered Successfully ✅"));
 });
 
+const registrationMember = asyncHandler(async (req, res) => {
+  /*
+    - get user details from frontend
+    - validations - check it not empty
+    - check if user already exists: user ,email
+    - create user object - create entry in DB
+    - remove password and refresh token field from responses
+    - check for user creation
+    - return res
+    */
+
+  const { email, password, firstName, lastName, isAdmin = "member" } = req.body;
+  const adminId = req.user._id;
+
+  console.log({
+    email: email,
+    password: password,
+    firstName,
+    lastName,
+    isAdmin: isAdmin,
+    adminId
+  });
+
+  if (
+    [firstName, lastName, email, password].some((field) => field?.trim() === "")
+  ) {
+    throw new ApiError(400, "field is missing or empty 🫠", res);
+  }
+  let adminStatus;
+  if (isAdmin !== "admin") {
+    if (adminId) {
+      adminStatus = await CRMUser.findById(adminId);
+      if (!adminStatus) {
+        throw new ApiError(404, `Admin reference account not found with is admin Id ${adminId} 🫠 `, res);
+      }
+    }
+  }
+
+  const existedUser = await CRMUser.findOne({ email });
+  if (existedUser) {
+    throw new ApiError(409, "User with mail  already exists 🫠", res);
+  }
+
+  const user = await CRMUser.create({
+    firstName, lastName,
+    email,
+    accountType: isAdmin,
+    adminId: adminId ? adminStatus?._id : req.user._id,
+    password,
+  });
+
+  const createdUser = await CRMUser.findById(user.id).select(
+    "-password -refreshToken"
+  );
+
+  if (!createdUser) {
+    throw new ApiError(500, "Something went wrong 🫠 while registering user", res);
+  }
+  return res
+    .status(201)
+    .json(new ApiResponse(200, createdUser, "User registered Successfully ✅"));
+});
 const loginUser = asyncHandler(async (req, res) => {
 
   /* 
@@ -276,5 +338,6 @@ export {
   refreshTokenToAccessToken,
   changeCurrentPassword,
   getCurrentUser,
-  updateAccountDetails
+  updateAccountDetails,
+  registrationMember
 };

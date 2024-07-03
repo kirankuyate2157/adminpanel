@@ -10,10 +10,10 @@ const HomeLayout = () => {
 
       <div className='w-full h-full flex relative '>
         <Sidebar/>
-        <div className='w-full h-full max-[100vh] overflow-auto'>
+        <div className='w-full h-full bg-gray-100 max-[100vh] overflow-auto'>
             <TopBar />
             <Navbar />
-            <div className='px-2 lg:px-10 '>
+            <div className='px-2  '>
             <Outlet />
             </div>
             <MobileBar/>
