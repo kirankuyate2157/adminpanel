@@ -11,7 +11,7 @@ const Sidebar = () => {
       >
         <div className=' h-full flex-col hidden sm:flex overflow-y-auto border-r border-slate-200 bg-background px-3 py-4 dark:border-slate-700 '>
           <div
-            to={"/home"}
+            to={"/"}
             className='mb-10 flex items-center rounded px-3 py-2 hover:text-slate-900 text-black'
           >
             <svg
@@ -37,7 +37,7 @@ const Sidebar = () => {
           <ul className='space-y-2 text-sm font-medium'>
             <li>
               <Link
-                to={"/home"}
+                to={"/"}
                 className='flex items-center rounded px-3 py-2 hover:text-slate-900 bg-slate-100 text-black dark:hover:bg-slate-400'
               >
                 <svg

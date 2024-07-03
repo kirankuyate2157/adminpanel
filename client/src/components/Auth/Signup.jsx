@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-// import toast from "react-hot-toast";
+import toast from "react-hot-toast";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -37,7 +37,7 @@ const Signup = ({ setType }) => {
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       for (const key in validationErrors) {
-        // toast.error(validationErrors[key]);
+        toast.error(validationErrors[key]);
         break;
       }
       return;
@@ -51,7 +51,7 @@ const Signup = ({ setType }) => {
         nav("/");
       }
     } catch (error) {
-      // toast.error(error.message);
+      toast.error(error.message);
     }
   };
 

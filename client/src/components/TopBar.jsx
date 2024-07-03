@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { currentUser, logOutUser } from "./Auth/utils/authApi.js";
 
 import { useNavigate } from "react-router-dom";
-// import toast from "react-hot-toast";
+import toast from "react-hot-toast";
 
 const TopBar = () => {
   const [user, setUser] = useState(null);
@@ -17,6 +17,7 @@ const TopBar = () => {
           setUser(userData);
         }
       } catch (error) {
+        navigate("/auth")
         console.error("Error fetching user data:", error);
       }
     };

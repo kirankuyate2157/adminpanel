@@ -1,7 +1,7 @@
 
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
-// import { Toaster } from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 import Auth from './components/Auth';
 import Home from './components/Home';
 import axios from 'axios';
@@ -19,7 +19,7 @@ function App() {
   return (
 
       <div className="h-[100vh] w-[100vw]">
-
+<Toaster/>
         <Routes>
           <Route path="/auth" element={<Auth />} />
           <Route path="/" element={<HomeLayout />} >
